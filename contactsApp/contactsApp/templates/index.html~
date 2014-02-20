@@ -1,0 +1,46 @@
+
+		<style type="text/css">
+			input{
+				width:250px;
+				border:1px solid gray;	
+				height:40px;
+				padding:10px;
+				margin:1pxx;		
+			}
+			
+			.loginBox{
+				width:250px;
+				margin-left:auto;
+				margin-right:auto;
+				margin-top: 3%;
+				padding: 1%;			
+			}
+			.mainHeading{
+				margin-left:auto;
+				margin-right:auto;
+				font-size: 25px;
+				font-weight: bold;
+				width: 200px;
+				padding: 1%;
+				color: rgb(11, 117, 175);
+			}
+			.loginButton{
+				margin-top:10px;
+							
+			}
+			.warning{
+				color:red;			
+			}
+			
+		</style>		
+		<div class='mainHeading'>Contacts Manager</div>
+		<div id='loginContainer' class='loginBox'>
+			 <form action ="/userLogin/" method = "POST">{% csrf_token %}
+				<div><input type="text" id="username" name="username" placeholder="Username" value='{{enteredUsername}}'></div>
+				<div ><input type="password" id="password" name="password" placeholder="Password"></div>
+				<div class="loginButton"><input type="submit" value="Login" ><div>
+				<div class="loginButton"><a href="/signup/" ><input type='button' value='Sign Up'/></a><div>
+				<div class="loginButton"><a href="{% url 'fb_login'  %}"><input type='button' value='Login with Facebook'/></a><div>
+				<div class="warning">{{error}}</div>
+			</form>
+		</div>

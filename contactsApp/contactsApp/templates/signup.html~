@@ -1,0 +1,20 @@
+<html>
+	<head>
+		<script src="{{MEDIA_URL}}js/jquery-1.8.2.min.js" type="text/javascript"></script>
+		<script src="{{MEDIA_URL}}js/main.js" type="text/javascript"></script>
+		<link rel="stylesheet" href="/media/css/login.css" />			
+	</head>
+	<body>
+		<div class='mainHeading'>Contacts Manager</div>
+		<div id='loginContainer' class='loginBox'>
+			<form action ="/userSignup/" method = "POST" onsubmit="return checkSignUpForm()">{% csrf_token %}
+				<div><input type="text" id="email" name="email" placeholder="email" ></div>
+				<div ><input type="password" id="password" name="password" placeholder="Password"></div>
+				<div ><input type="password" id="confirmPassword" name="confirmPassword" placeholder="confirm Password"></div>
+				<div class="loginButton"><input type="submit" value="Signup" ><div>
+				
+				<div class="warning">{{error}}</div>
+			</form>
+		</div>
+	</body>
+</html>
