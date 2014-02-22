@@ -4,18 +4,101 @@ $(document).ready(function(){
 			modal:true,
 			width:500,
 			height:350,
-			buttons:[{"text":"Add",click:addContact()},{"text":"cancel",click:function(){$("#newContact").dialog( "close" );}}],
+			buttons:[{"text":"Add",click:function(){addContact();}},{"text":"cancel",click:function(){$("#newContact").dialog( "close" );}}],
 		});
+	});
+	//delete
+	$(".delete").die("click").live("click",function(){
+		deleteContact($(this).attr("row"));
+	});
+	//editRow
+	$(".editRow").die("click").live("click",function(){
+		//deleteContact($(this).attr("row"));
+		var firstName = $(this).attr("rowfirstname");
+		var lastName = $(this).attr("rowlastname");
+		var email = $(this).attr("rowemail");
+		var mobile = $(this).attr("rowmobile");
+		var alternatenumber = $(this).attr("rowalternatenumber");
+		var contactId = $(this).attr("rowid");
+		var editContactObj = {};
+		editContactObj.contactId = contactId;
+		editContactObj.firstName = firstName;
+		editContactObj.lastName = lastName;
+		editContactObj.email = email;
+		editContactObj.mobile = mobile;
+		editContactObj.alternatenumber = alternatenumber;
+		$("#editContactDiv").empty();
+		$("#editContactDiv").append('<div class="leftColoumn"> \
+				<div class="for">First Name</div><div ><input type="text" id="editFirstName" /></div> \
+				<div class="for">Last Name</div><div ><input type="text" id="editLastName" /></div> \
+				<div class="for">Email</div><div ><input type="text" id="editEmail" /></div> \
+				<div class="for">Mobile Number</div><div><input type="text" id="editMobile" /></div> \
+				<div class="for">Alternate Number</div><div ><input type="text" id="editAlternateNumber" /></div> \
+				<input type="hidden" id="editContactId" /> \
+			</div> \
+			<div id="editWarning" style="color:red;margin-left:60px;"></div>');
+		$("#editFirstName").val(firstName);
+		$("#editLastName").val(lastName);
+		$("#editEmail").val(email);
+		$("#editMobile").val(mobile);
+		$("#editAlternateNumber").val(alternatenumber);
+		//editContactId
+		$("#editContactId").val(contactId);
+		$("#editContactDiv").dialog({
+			modal:true,
+			width:500,
+			height:350,
+			title:"Update Contact",
+			buttons:[{"text":"Update","contactId":contactId,click:function(){var contactId =$(this).attr("contactId");editContact(contactId);}},{"text":"cancel",click:function(){$("#editContactDiv").dialog("close");}}],
+		});
+		
 	});
 });
 
-//$("#newContact").dialog();
+
 function addContact(){
+	$("#addWarning").html('');
 	var firstName = $("#firstName").val();
 	var lastName = $("#lastName").val();
 	var email = $("#email").val();
 	var mobile = $("#mobile").val();
+	
 	var alternateNumber = $("#alternateNumber").val();
+	var testEmail = email.indexOf(" ");
+	if(testEmail!=-1){
+		$("#addWarning").html("Email should not contain spaces");
+		return false;
+	}
+	var testMobile = mobile.indexOf(" ");
+	if(testMobile!=-1){
+		$("#addWarning").html("Mobile number should not contain spaces");
+		return false;
+	}
+
+	if(!isNumber(mobile)){
+		$("#addWarning").html("Mobile number should contain only digits");
+		return false;
+	}
+	if(mobile.length!=10){
+		$("#addWarning").html("Mobile number length should be of 10 digits");
+		return false;
+	}
+	if(alternateNumber){
+		testAlternateNumber = alternateNumber.indexOf(" ");
+		if(testAlternateNumber!=-1){
+			$("#addWarning").html("Alternate number should not contain spaces");
+			return false;
+		}
+		if(!isNumber(alternateNumber)){
+			$("#addWarning").html("Alternative number should contain only digits");
+			return false;
+		}
+		if(alternateNumber.length!=10){
+			$("#addWarning").html("Alternative number length should be of 10 digits");
+			return false;
+		}
+	
+	}
 	if(!firstName || (jQuery.trim( firstName )).length==0){
 		$("#addWarning").html("First Name Cannot be Empty");
 		return false;
@@ -24,16 +107,121 @@ function addContact(){
 		$("#addWarning").html("Mobile Number Cannot be Empty");
 		return false;
 	}
-	if(mobile.length>10){
-		$("#addWarning").html("Mobile number length should not exceed 10 numbers");
-		return false;
-	}
+	
 	if(email){
 		if(!validateEmail(email)){
 			$("#addWarning").html("Email entered is not a valid one");
 			return false;
 		}
 	}
+	var newContactObj = {};
+	newContactObj.firstName = firstName;
+	newContactObj.lastName = lastName;
+	newContactObj.email = email;
+	newContactObj.mobile = mobile;
+	newContactObj.alternateNumber = alternateNumber;
+	console.log(newContactObj);
+	//
+	jQuery.ajax({
+		type:"POST",
+		data:newContactObj,
+		url:"/addContact/",
+		success:function(data){
+				$("body").html(data);				
+		}
+	});
+	
+}
+function deleteContact(row){
+	jQuery.ajax({
+		type:"POST",
+		data:{'contact':row},
+		url:"/deleteContact/",
+		success:function(data){
+				$("body").html(data);				
+		}
+	});
+}
+
+function editContact(contactId){
+	var firstName = $("#editFirstName").val();
+	var lastName = $("#editLastName").val();
+	var email = $("#editEmail").val();
+	var mobile = $("#editMobile").val();
+	var alternateNumber = $("#editAlternateNumber").val();
+	var updateContactObj = {};
+	
+	//////////////////////////
+	var testEmail = email.indexOf(" ");
+	if(testEmail!=-1){
+		$("#editWarning").html("Email should not contain spaces");
+		return false;
+	}
+	var testMobile = mobile.indexOf(" ");
+	if(testMobile!=-1){
+		$("#editWarning").html("Mobile number should not contain spaces");
+		return false;
+	}
+
+	if(!isNumber(mobile)){
+		$("#editWarning").html("Mobile number should contain only digits");
+		return false;
+	}
+	if(mobile.length!=10){
+		$("#editWarning").html("Mobile number length should be of 10 digits");
+		return false;
+	}
+	if(alternateNumber){
+		testAlternateNumber = alternateNumber.indexOf(" ");
+		if(testAlternateNumber!=-1){
+			$("#editWarning").html("Alternate number should not contain spaces");
+			return false;
+		}
+		if(!isNumber(alternateNumber)){
+			$("#editWarning").html("Alternative number should contain only digits");
+			return false;
+		}
+		if(alternateNumber.length!=10){
+			$("#editWarning").html("Alternative number length should be of 10 digits");
+			return false;
+		}
+	
+	}
+	if(!firstName || (jQuery.trim( firstName )).length==0){
+		$("#editWarning").html("First Name Cannot be Empty");
+		return false;
+	}
+	if(!mobile || (jQuery.trim( mobile )).length==0){
+		$("#editWarning").html("Mobile Number Cannot be Empty");
+		return false;
+	}
+	
+	if(email){
+		if(!validateEmail(email)){
+			$("#editWarning").html("Email entered is not a valid one");
+			return false;
+		}
+	}
+
+/////////////////////////////////
+	
+	updateContactObj.firstName = firstName;
+	updateContactObj.lastName = lastName;
+	updateContactObj.email = email;
+	updateContactObj.mobile = mobile;
+	updateContactObj.alternateNumber = alternateNumber;
+	updateContactObj.contactId = $("#editContactId").val();
+
+	console.log(updateContactObj);
+	//
+	jQuery.ajax({
+		type:"POST",
+		data:updateContactObj,
+		url:"/updateContact/",
+		success:function(data){
+				$("body").html(data);				
+		}
+	});
 }
 
 function checkSignUpForm(){
@@ -91,4 +279,8 @@ function checkSignUpForm(){
 function validateEmail(email) { 
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
+}
+
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
 }

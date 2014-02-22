@@ -27,8 +27,19 @@ urlpatterns = urlpatterns+ patterns('',
 	(r"^contacts/$", direct_to_template, {"template": "contacts.html"}) ,
 	
 	(r"^signup/$", direct_to_template, {"template": "signup.html"}) ,
+
+	(r"^login/$", direct_to_template, {"template": "login.html"}) ,
 	#userSignup
 	 (r'^userSignup/$', 'contactsApp.views.userSignup'),
-	
+	#userLogin
+	(r'^userLogin/$', 'contactsApp.views.userLogin'),
+	#userLogout
+	(r'^userLogout/$', 'contactsApp.views.userLogout'),
+        #addContact
+	(r'^addContact/$', 'contactsApp.views.addContact'),
+	#deleteContact
+	(r'^deleteContact/$', 'contactsApp.views.deleteContact'),
+	#updateContact
+	(r'^updateContact/$', 'contactsApp.views.updateContact'),
 )
 #

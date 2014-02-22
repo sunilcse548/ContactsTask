@@ -4,12 +4,18 @@
 		<script src="/media/js/jquery-ui.js" type="text/javascript"></script>
 		<script src="/media/js/main.js" type="text/javascript"></script>
 		<link rel="stylesheet" href="/media/css/contacts.css" />		
-		<link rel="stylesheet" href="/media/css/jquery-ui.css" />			
+		<link rel="stylesheet" href="/media/css/jquery-ui.css" />
+		<link rel="stylesheet" href="/media/css/bootstrap.css" />			
 	</head>
 	<body>
+		<center><h1 class="mainHeading">Contacts Manager</h1></center>
 		<div id='createContactDiv'>
-			<button id='createContact'>Add New </button>
+			<button id='createContact' class='btn btn-info' style="float:left;">Add Contact</button>
+			<form action="/userLogout/"><button id='createContact' class='btn btn-inverse' type='submit' style="margin-left:10px;">Logout</button></form>
 		</div>	
+		<div style="padding:10px;">
+			<center style='color:#31576c;font-size:22px;'><b>{{callbackMessage}}</b></center>		
+		</div>
 		<div id='newContact' style="display:none;">
 			<div class='leftColoumn'>
 				<div class="for">First Name</div><div ><input type="text" id="firstName" /></div>
@@ -18,12 +24,50 @@
 				<div class="for">Mobile Number</div><div><input type="text" id="mobile" /></div>
 				<div class="for">Alternate Number</div><div ><input type="text" id="alternateNumber" /></div>
 			</div>
-			
+			<div id="addWarning" style="color:red;margin-left:60px;"></div>
 		</div>
 		<div id="contactsDiv">
-			{% for object in object_list %}
-				<b>{{object.firstName}}</b>			
+		{% if object_list %}
+		<table class="table table-bordered table-stripped">
+			<tr style='color: rgb(32, 115, 162);'><th>First Name</th><th>Last Name</th><th>Email</th><th>Mobile</th><th>Alternate Email</th></tr>
+		{% else %}
+			<center><b>There are no contacts in Your Account. Add few by clicking button above.</b></center>
+		{% endif %}
+		{% for object in object_list %}
+		   
+			<tr>	
+				<td>	<b>{{object.firstName}}</b>	</td>		
+				<td>	<b>{{object.lastName}}</b>			</td>	
+				<td>	<b>{{object.email}}</b>			</td>	
+				<td>	<b>{{object.mobile}}</b>			</td>	
+				<td>	<b>{{object.alternateNumber}}</b>	</td>			
+				<td><button class='btn btn-primary editRow' rowId = '{{object.id}}' rowFirstName = '{{object.firstName}}' rowLastName = '{{object.lastName}}' rowEmail = '{{object.email}}' rowMobile = '{{object.mobile}}' rowAlternateNumber = '{{object.alternateNumber}}'>Edit</button></td>
+				<td><button class='btn btn-danger delete' row = {{object.id}}>Delete</button></td>
+			</tr>
 			{% endfor %}
+			</table>
 		</div>
+		<div></div>
+		<div>
+			<span>
+			{% if object_list.has_previous %}
+            <a href="?page={{ object_list.previous_page_number }}&query={{ query }}" class="btn">previous</a>
+        {% endif %}
+        </span>
+        
+		<span style="margin-left:75%;">
+        {% if object_list.has_next %}
+            <a href="?page={{ object_list.next_page_number }}&query={{ query }}" class="btn" >next</a>
+        {% endif %}
+      </span>		
+		</div>
+		{% if object_list %}
+			<div class="current">
+            Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+        </div>
+		{% else %}
+		{% endif %}
+		<div></div>
+		<div id='editContactDiv' style="modal:true;"></div>
 	</body>
 </html>
