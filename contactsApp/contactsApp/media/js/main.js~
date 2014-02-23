@@ -53,8 +53,17 @@ $(document).ready(function(){
 		});
 		
 	});
+
+	//paginateByAlphabet
+	$("#paginateByAlphabet").change(function(){
+		alert("ok");
+	  alert($("#paginateByAlphabet").val());
+	});
 });
 
+function selectByAlphabet(){
+	alert($("#paginateByAlphabet").val());
+}
 
 function addContact(){
 	$("#addWarning").html('');
@@ -154,51 +163,51 @@ function editContact(contactId){
 	//////////////////////////
 	var testEmail = email.indexOf(" ");
 	if(testEmail!=-1){
-		$("#addWarning").html("Email should not contain spaces");
+		$("#editWarning").html("Email should not contain spaces");
 		return false;
 	}
 	var testMobile = mobile.indexOf(" ");
 	if(testMobile!=-1){
-		$("#addWarning").html("Mobile number should not contain spaces");
+		$("#editWarning").html("Mobile number should not contain spaces");
 		return false;
 	}
 
 	if(!isNumber(mobile)){
-		$("#addWarning").html("Mobile number should contain only digits");
+		$("#editWarning").html("Mobile number should contain only digits");
 		return false;
 	}
 	if(mobile.length!=10){
-		$("#addWarning").html("Mobile number length should be of 10 digits");
+		$("#editWarning").html("Mobile number length should be of 10 digits");
 		return false;
 	}
 	if(alternateNumber){
 		testAlternateNumber = alternateNumber.indexOf(" ");
 		if(testAlternateNumber!=-1){
-			$("#addWarning").html("Alternate number should not contain spaces");
+			$("#editWarning").html("Alternate number should not contain spaces");
 			return false;
 		}
 		if(!isNumber(alternateNumber)){
-			$("#addWarning").html("Alternative number should contain only digits");
+			$("#editWarning").html("Alternative number should contain only digits");
 			return false;
 		}
 		if(alternateNumber.length!=10){
-			$("#addWarning").html("Alternative number length should be of 10 digits");
+			$("#editWarning").html("Alternative number length should be of 10 digits");
 			return false;
 		}
 	
 	}
 	if(!firstName || (jQuery.trim( firstName )).length==0){
-		$("#addWarning").html("First Name Cannot be Empty");
+		$("#editWarning").html("First Name Cannot be Empty");
 		return false;
 	}
 	if(!mobile || (jQuery.trim( mobile )).length==0){
-		$("#addWarning").html("Mobile Number Cannot be Empty");
+		$("#editWarning").html("Mobile Number Cannot be Empty");
 		return false;
 	}
 	
 	if(email){
 		if(!validateEmail(email)){
-			$("#addWarning").html("Email entered is not a valid one");
+			$("#editWarning").html("Email entered is not a valid one");
 			return false;
 		}
 	}

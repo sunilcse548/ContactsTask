@@ -1,0 +1,44 @@
+#createContactDiv{
+	margin: 30px;
+	margin-left: auto;
+	width: 200px;
+	margin-right: auto;
+}
+.current{
+	margin-left:auto;
+	margin-right:auto;
+	width:200px;
+}
+.facebookButton{
+	background: #3b5998 !important;
+	color: #eee !important;
+	font-weight: bold !important;	
+}
+.for{
+	margin:2px;
+	float: left;
+	width: 200px;
+}
+.leftColoumn{
+	width: 450px;
+	float: left;
+}
+
+.mainHeading{
+	margin-left:auto;
+	margin-right:auto;
+	font-size: 25px;
+	font-weight: bold;
+	width: 230px;
+	padding: 1%;
+	color: rgb(11, 117, 175);
+}
+.tableRow{
+	float: left;
+	width: 200px;
+}
+.tableLastRow{
+	width: 200px;
+	float:left;
+	border 1px solid ;
+}

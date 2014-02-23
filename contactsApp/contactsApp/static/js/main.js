@@ -1,4 +1,8 @@
 $(document).ready(function(){
+
+	$("#paginateByAlphabet").val($("#selectedLetter").attr("value"));
+	
+	
 	$("#createContact").click(function(){
 		$("#newContact").dialog({
 			modal:true,
@@ -53,13 +57,8 @@ $(document).ready(function(){
 		});
 		
 	});
-
-	
 });
 
-function selectByAlphabet(){
-	alert($("#paginateByAlphabet").val());
-}
 
 function addContact(){
 	$("#addWarning").html('');
@@ -228,6 +227,21 @@ function editContact(contactId){
 		}
 	});
 }
+
+function selectByAlphabet(){
+	//alert($("#paginateByAlphabet").val());
+	var letter = $("#paginateByAlphabet").val();
+	$("#loader").show();
+	jQuery.ajax({
+		type:"POST",
+		data:{'letter':letter},
+		url:"/paginateByAlphabet/",
+		success:function(data){
+				$("body").html(data);				
+		}
+	});
+}
+
 
 function checkSignUpForm(){
 	var email = $("#email").val();

@@ -163,12 +163,12 @@ def checkSession(request):
             except EmptyPage:
             
                 objects = paginator.page(paginator.num_pages)
-            return render_to_response('contacts.html',{'object_list':objects})
+            return render_to_response('contacts.html',{'object_list':objects},context_instance=RequestContext(request))
         else:
            print "No contacts"
-        return render_to_response( 'contacts.html', {})
+        return render_to_response( 'contacts.html', {},context_instance=RequestContext(request))
     else:
-      return render_to_response( 'login.html', {})
+      return render_to_response( 'login.html', {},context_instance=RequestContext(request))
 
 @login_required(login_url='/login/')
 def addContact(request):
@@ -233,6 +233,39 @@ def deleteContact(request):
     else:
         return render_to_response( 'login.html', {})
 
+
+#paginateByAlphabet
+@login_required(login_url='/login/')
+def paginateByAlphabet(request):
+    currentUser = ''
+    try:
+         currentUser = request.session["user"]
+    except :
+        print "No session"
+    if currentUser:
+        loggedInUser = User.objects.get(username = currentUser)
+        alphabet = request.POST.get('letter')
+        contactsList = contacts.objects.filter(user=loggedInUser).filter(firstName__startswith=alphabet)
+        #logging.warning(contactsList)
+        if contactsList:
+            for x in contactsList:
+                print x
+            paginator = Paginator(contactsList, 10)
+            page = request.GET.get('page')
+            try:
+                objects = paginator.page(page)
+            except PageNotAnInteger:
+            
+                objects = paginator.page(1)
+            except EmptyPage:
+            
+                objects = paginator.page(paginator.num_pages)
+            return render_to_response('contacts.html',{'object_list':objects},context_instance=RequestContext(request))
+        else:
+           print "No contacts"
+        return render_to_response( 'contacts.html', {"paginatedFlag":"empty", "letter":alphabet},context_instance=RequestContext(request))
+    else:
+      return render_to_response( 'login.html', {},context_instance=RequestContext(request))
 @login_required(login_url='/login/')
 def updateContact(request):
     currentUser = ''

@@ -33,9 +33,9 @@
 			}
 			
 		</style>
-		<link rel="stylesheet" href="/media/css/bootstrap.css" />
-		<link rel="stylesheet" href="/media/css/contacts.css" />
-		<script src="/media/js/jquery-1.8.2.min.js" type="text/javascript"></script>		
+		<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.css" />
+		<link rel="stylesheet" href="{{STATIC_URL}}css/contacts.css" />
+		<script src="{{STATIC_URL}}js/jquery-1.8.2.min.js" type="text/javascript"></script>		
 		<div class='mainHeading'>Contacts Manager</div>
 		<div id='loginContainer' class='loginBox'>
 			 <form action ="/userLogin/" method = "POST">{% csrf_token %}

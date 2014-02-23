@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
-from django.views.generic.simple import direct_to_template
+from django.views.generic import TemplateView
+
 import settings
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -20,15 +21,17 @@ urlpatterns = patterns('contactsApp.views',
 )
 
 urlpatterns = urlpatterns+ patterns('',
-	#(r"^$", direct_to_template, {"template": "index.html"}) ,
-	(r'^$', 'contactsApp.views.checkSession'),
-	(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
-
-	(r"^contacts/$", direct_to_template, {"template": "contacts.html"}) ,
 	
-	(r"^signup/$", direct_to_template, {"template": "signup.html"}) ,
+	(r'^$', 'contactsApp.views.checkSession'),
+	(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 
-	(r"^login/$", direct_to_template, {"template": "login.html"}) ,
+	(r'^contacts/', TemplateView.as_view(template_name="contacts.html")),
+	
+	
+	(r'^signup/', TemplateView.as_view(template_name="signup.html")),
+	
+	(r'^login/', TemplateView.as_view(template_name="login.html")),
+	
 	#userSignup
 	 (r'^userSignup/$', 'contactsApp.views.userSignup'),
 	#userLogin
@@ -41,5 +44,7 @@ urlpatterns = urlpatterns+ patterns('',
 	(r'^deleteContact/$', 'contactsApp.views.deleteContact'),
 	#updateContact
 	(r'^updateContact/$', 'contactsApp.views.updateContact'),
+	#paginateByAlphabet
+	(r'^paginateByAlphabet/$', 'contactsApp.views.paginateByAlphabet'),
 )
 #
